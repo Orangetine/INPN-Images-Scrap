@@ -81,7 +81,7 @@ def main(output_dir="downloads"):
     os.makedirs(output_dir, exist_ok=True)
     results = []
 
-    for url in urls[3338:]:  
+    for url in urls:  
         print(f"\n🔎 Recherche d’archive pour {url}")
         archive_url = get_wayback_url(url)
 
