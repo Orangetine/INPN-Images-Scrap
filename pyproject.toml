@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "inpn-images-scrap"
+version = "0.1.0"
+description = ""
+authors = ["Orangetine <salima.rakass@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "2.2.4"
+pandas = "^2.3.2"
+notebook = "6.5.6"
+requests = "^2.32.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
