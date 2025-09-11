@@ -15,7 +15,7 @@ CDX_API = "https://web.archive.org/cdx/search/cdx"
 
 session = requests.Session()
 retries = Retry(
-    total=5,
+    total=10,
     backoff_factor=2,
     status_forcelist=[500, 502, 503, 504],
     allowed_methods=["GET", "HEAD"]
@@ -54,17 +54,8 @@ def download_file(archive_url, output_dir="downloads"):
         if r.status_code != 200:
             print(f"⚠️ Erreur {r.status_code} en téléchargeant {archive_url}")
             return None
-
-        # Chercher le vrai nom dans les headers
-        filename = None
-        cd = r.headers.get("Content-Disposition")
-        if cd and "filename=" in cd:
-            filename = cd.split("filename=")[-1].strip('"')
-        if not filename:
-            filename = os.path.basename(archive_url.split("?")[0]) or "fichier.jpg"
-            if not filename.lower().endswith((".jpg", ".jpeg")):
-                filename += ".jpg"
-
+   
+        filename = os.path.basename(archive_url.split("?")[0])+ ".jpg"
         os.makedirs(output_dir, exist_ok=True)
         filepath = os.path.join(output_dir, filename)
 
@@ -79,7 +70,6 @@ def download_file(archive_url, output_dir="downloads"):
 
 def main(output_dir="downloads"):
     os.makedirs(output_dir, exist_ok=True)
-    results = []
 
     for url in urls:  
         print(f"\n🔎 Recherche d’archive pour {url}")
@@ -88,27 +78,15 @@ def main(output_dir="downloads"):
         if archive_url:
             print(f"📂 Archive trouvée : {archive_url}")
             filepath = download_file(archive_url, output_dir=output_dir)
-            results.append({
-                "url_originale": url,
-                "url_wayback": archive_url,
-                "fichier_local": filepath if filepath else "Erreur téléchargement"
-            })
         else:
             print("❌ Pas d’archive trouvée")
-            results.append({
-                "url_originale": url,
-                "url_wayback": None,
-                "fichier_local": None
-            })
 
         # Pause aléatoire 10–15 sec
         pause = random.uniform(10, 15)
         print(f"⏳ Attente {pause:.2f} secondes...")
         time.sleep(pause)
 
-    df = pd.DataFrame(results)
-    df.to_csv(os.path.join(output_dir, "wayback_urls.csv"), index=False)
-    print(f"\n✅ Résultats enregistrés dans {output_dir}/wayback_urls.csv")
+    print(f"\n✅ Fini")
 
 if __name__ == "__main__":
     main()
