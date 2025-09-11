@@ -22,7 +22,12 @@ poetry install
 ```
 source .venv/bin/activate
 ```
-7. Exécuter le script
+7. Exécuter le premier script
 ``` 
 python inpn_images.py
+```
+
+8. Exécuter le deuxième script
+``` 
+python reconstitution_t_medias.py
 ```
